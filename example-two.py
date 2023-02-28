@@ -6,21 +6,24 @@ readFile = pd.read_excel("input.xlsx")
 def sortByName(file):
     df = file
     df = df.iloc[10:62, 1:8]
-    df = df.rename(columns={df.columns[0]: "id", df.columns[1]: "ho", df.columns[2]: "ten", df.columns[3]: "tuoi",
+    df = df.rename(columns={df.columns[0]: "id", df.columns[1]: "ho", df.columns[2]: "ten", df.columns[3]: "ngay sinh",
                             df.columns[4]: "toan",
                             df.columns[5]: "ly", df.columns[6]: "hoa"})
 
     df = df.sort_values(by=["ten"])
+
+    pd.DataFrame(df).to_excel('sort_by_name.xlsx', index=False)
+
     print(df)
 
 
-# sortByName(readFile)
+sortByName(readFile)
 
 
-def average(file):
+def statistical(file):
     df = file
     df = df.iloc[10:62, 1:8]
-    df = df.rename(columns={df.columns[0]: "id", df.columns[1]: "ho", df.columns[2]: "ten", df.columns[3]: "tuoi",
+    df = df.rename(columns={df.columns[0]: "id", df.columns[1]: "ho", df.columns[2]: "ten", df.columns[3]: "ngay sinh",
                             df.columns[4]: "toan",
                             df.columns[5]: "ly", df.columns[6]: "hoa"})
 
@@ -39,6 +42,19 @@ def average(file):
         else:
             medium += 1
 
-    print(good, medium, rather)
+    newDf = pd.DataFrame({
+        'Good student': [good],
+        'Advanced students': [rather],
+        'Average students': [medium]
+    })
 
-average(readFile)
+    df = df.append(newDf, ignore_index=True)
+
+    pd.DataFrame(df).to_excel('statistical.xlsx', index=False)
+
+    print(f"Số học sinh giỏi: {good}")
+    print(f"Số học sinh khá: {rather}")
+    print(f"Số học sinh trung bình: {medium}")
+
+
+statistical(readFile)
